@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![Tahunya Krispi-ya](https://tahunyakrispiya.my.id/favicon.png)
-
 **Platform web e-commerce + branding untuk UMKM kuliner tahu crispy khas Bekasi Selatan.**
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-tahunyakrispiya.my.id-orange?style=for-the-badge)](https://tahunyakrispiya.my.id)
