@@ -1,5 +1,7 @@
 # 🔥 Tahunya Krispi-ya — Web Platform
 
+---
+
 <div align="center">
 
 <img src="https://tahunyakrispiya.my.id/favicon.png" alt="Tahunya Krispi-ya" width="80" />
