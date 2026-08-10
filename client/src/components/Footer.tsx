@@ -62,10 +62,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Kontak</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>+62 812-3456-7890</li>
-              <li>info@krispiya.com</li>
-              <li>Jl. Raya Contoh No. 123</li>
-              <li>Jakarta Selatan</li>
+              <li>+62 812-8836-2512</li>
+              <li>tahunyakrispiya@gmail.com</li>
+              <li>Jalan Pulo Ribung No.12, Pekayon Jaya, Bekasi Selatan, Indonesia</li>
             </ul>
           </div>
         </div>

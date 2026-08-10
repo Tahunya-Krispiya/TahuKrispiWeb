@@ -22,9 +22,9 @@ const decryptNumber = (encrypted: string) => {
   }).join('');
 };
 
-const ENCRYPTED_ACCOUNT_NUMBER = encryptNumber("1234567890");
-const BANK_NAME = "Bank Mandiri";
-const ACCOUNT_HOLDER = "Tahunya Krispi-ya";
+const ENCRYPTED_ACCOUNT_NUMBER = encryptNumber("8420697954");
+const BANK_NAME = "BCA";
+const ACCOUNT_HOLDER = "Ajeng Andhika";
 
 export default function BankInfo() {
   const [password, setPassword] = useState("");

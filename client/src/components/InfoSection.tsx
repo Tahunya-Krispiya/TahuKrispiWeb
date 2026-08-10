@@ -8,9 +8,9 @@ interface InfoSectionProps {
 }
 
 export default function InfoSection({
-  address = "Jl. Raya Contoh No. 123, Jakarta Selatan 12345",
-  phone = "+62 812-3456-7890",
-  hours = "Senin - Minggu: 09.00 - 21.00 WIB"
+  address = "Jalan Pulo Ribung No.12",
+  phone = "+62 812-8836-2512",
+  hours = "Selasa - Minggu: 09.00 - 21.00 WIB"
 }: InfoSectionProps) {
   return (
     <section id="info" className="py-16 md:py-24 bg-muted/30" data-testid="info-section">
@@ -38,6 +38,9 @@ export default function InfoSection({
               <p className="text-muted-foreground" data-testid="text-address">
                 {address}
               </p>
+              <a href="https://maps.app.goo.gl/RoVegza696jarKxq7" target="_blank" rel="noreferrer" className="text-primary hover:underline text-sm mt-2 inline-block">
+                Buka Tahunya Krispiya Pekayon di Maps
+              </a>
             </CardContent>
           </Card>
 

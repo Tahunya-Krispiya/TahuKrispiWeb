@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/IMG-20250911-WA0009_1763095354038.jpg";
+import heroImage from "@assets/compressed/IMG-20250911-WA0009_1763095354038.webp";
 import logoImg from "@assets/1763097449392_1763097461717.png";
 
 interface HeroProps {
@@ -27,7 +27,7 @@ export default function Hero({ onCTAClick }: HeroProps) {
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-center md:text-left space-y-6 animate-fade-in-up">
+          <div className="text-center md:text-left space-y-6">
             <div className="flex justify-center md:justify-start mb-6">
               <img 
                 src={logoImg} 
@@ -76,8 +76,8 @@ export default function Hero({ onCTAClick }: HeroProps) {
             </div>
           </div>
 
-          <div className="relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
+          <div className="relative">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src={heroImage}
                 alt="Tahu Crispy Krispi-ya dalam box"

@@ -22,7 +22,7 @@ export default function ProductCard({ product, onBuyNow, onAddToCart }: ProductC
 
   return (
     <Card
-      className="overflow-hidden hover-elevate active-elevate-2 transition-all duration-300 hover:-translate-y-1"
+      className="overflow-hidden hover-elevate active-elevate-2 transition-shadow duration-300"
       data-testid={`card-product-${product.id}`}
     >
       <CardHeader className="p-0">

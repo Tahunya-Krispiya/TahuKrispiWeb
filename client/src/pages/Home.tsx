@@ -1,31 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import ShoppingCart from "@/components/ShoppingCart";
 import InfoSection from "@/components/InfoSection";
+import SambelKalasanSection from "@/components/SambelKalasanSection";
 import DeliveryApps from "@/components/DeliveryApps";
 import BankInfo from "@/components/BankInfo";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
+import TikTokLiveCard from "@/components/TikTokLiveCard";
+import QrisPayment from "@/components/QrisPayment";
+import DeliveryEstimator from "@/components/DeliveryEstimator";
 import type { Product, CartItem } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import type { PublicStatus } from "@/lib/firebase";
+import FlashSaleBanner from "@/components/FlashSaleBanner";
+import BudgetTahuCard from "@/components/BudgetTahuCard";
+import { Link } from "react-router-dom";
+import { QrCode, ArrowRight } from "lucide-react";
 
-import img1 from "@assets/IMG-20250911-WA0018_1763095354099.jpg";
-import img2 from "@assets/IMG-20250911-WA0021_1763095354116.jpg";
-import img3 from "@assets/IMG-20250911-WA0027_1763095354130.jpg";
-import img4 from "@assets/IMG-20250911-WA0026_1763095354145.jpg";
-import img5 from "@assets/IMG-20250911-WA0020_1763095354162.jpg";
+import img1 from "@assets/compressed/IMG-20250911-WA0018_1763095354099.webp";
+import img2 from "@assets/compressed/IMG-20250911-WA0021_1763095354116.webp";
+import img3 from "@assets/compressed/IMG-20250911-WA0027_1763095354130.webp";
+import img4 from "@assets/compressed/IMG-20250911-WA0026_1763095354145.webp";
+import img5 from "@assets/compressed/IMG-20250911-WA0020_1763095354162.webp";
 
-const WHATSAPP_NUMBER = "6281234567890";
+const WHATSAPP_NUMBER = "6281288362512";
 
 const products: Product[] = [
   {
     id: "small",
     name: "Small Pack",
-    size: "5 pcs",
-    pieces: 5,
+    size: "4 pcs",
+    pieces: 4,
     price: 10000,
     image: img1,
     description: "Porsi pas untuk cemilan sore atau makan sendiri",
@@ -34,8 +42,8 @@ const products: Product[] = [
   {
     id: "medium",
     name: "Medium Pack",
-    size: "10 pcs",
-    pieces: 10,
+    size: "8 pcs",
+    pieces: 8,
     price: 18000,
     image: img2,
     description: "Cocok untuk berbagi dengan teman atau keluarga",
@@ -44,8 +52,8 @@ const products: Product[] = [
   {
     id: "large",
     name: "Large Pack",
-    size: "20 pcs",
-    pieces: 20,
+    size: "18 pcs",
+    pieces: 18,
     price: 35000,
     image: img3,
     description: "Pilihan hemat untuk acara atau pesta kecil",
@@ -74,7 +82,7 @@ const products: Product[] = [
   {
     id: "paket-1",
     name: "Paket Happy",
-    size: "Size L + Size M (30 Pcs)+ Extra Sambel 1 Cup",
+    size: "Size L + Size M (26 Pcs) + Extra Sambel 1 Cup",
     pieces: 1,
     price: 50000,
     image: img2,
@@ -84,7 +92,7 @@ const products: Product[] = [
   {
     id: "paket-2",
     name: "Paket Love",
-    size: "Size L 2 (40 Pcs)+ Extra Sambel 2 Cup",
+    size: "Size L 2 (36 Pcs) + Extra Sambel 2 Cup",
     pieces: 2,
     price: 60000,
     image: img1,
@@ -93,7 +101,11 @@ const products: Product[] = [
   },
 ];
 
-export default function Home() {
+interface HomeProps {
+  globalStatus?: PublicStatus;
+}
+
+export default function Home({ globalStatus }: HomeProps) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { toast } = useToast();
@@ -156,9 +168,53 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <LoadingScreen />
       <Navbar cartItemCount={totalItems} onCartClick={() => setIsCartOpen(true)} />
       <Hero />
+      <TikTokLiveCard status={globalStatus} />
+
+      {globalStatus && (
+        <section className="max-w-7xl mx-auto px-4 mt-6" aria-label="Status pemesanan">
+          <div className="bg-white rounded-xl shadow p-4 border-l-4 border-orange-500">
+            <p className="font-semibold text-gray-700 mb-2">Status pemesanan online</p>
+            <div className="flex flex-wrap gap-2 text-sm">
+              {[
+                ["GoFood", globalStatus.isGoFoodOnline],
+                ["GrabFood", globalStatus.isGrabFoodOnline],
+                ["ShopeeFood", globalStatus.isShopeeFoodOnline],
+              ].map(([name, online]) => (
+                <span key={String(name)} className={`rounded-full px-3 py-1 font-medium ${name === "GoFood" ? "bg-red-100 text-red-700" : (online ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500")}`}>
+                  {name}: {name === "GoFood" ? "Forgotten" : (online ? "Online" : "Offline")}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+      <FlashSaleBanner status={globalStatus} onBuyNow={handleBuyNow} onAddToCart={addToCart} />
+
+      <section className="max-w-7xl mx-auto px-4 mt-6 sm:mt-10 mb-[-2rem]">
+        <Link to="/payment">
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl p-6 md:p-8 text-white shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute right-[-10%] top-[-20%] w-64 h-64 bg-white/20 rounded-full blur-3xl group-hover:bg-white/30 transition-all"></div>
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 p-4 rounded-2xl">
+                  <QrCode className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl md:text-2xl font-black mb-1">Portal Pembayaran Cepat</h3>
+                  <p className="text-white/90 text-sm md:text-base font-medium">Sudah janjian sama admin atau ingin bayar instan pakai QRIS? Klik di sini!</p>
+                </div>
+              </div>
+              <div className="bg-white text-orange-600 font-bold px-6 py-3 rounded-xl flex items-center gap-2 group-hover:bg-orange-50 transition-colors w-full md:w-auto justify-center mt-4 md:mt-0">
+                Buka Portal <ArrowRight className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+        </Link>
+      </section>
 
       <section id="menu" className="py-16 md:py-24" data-testid="menu-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -168,6 +224,20 @@ export default function Home() {
               Pilih paket favorit Anda dan nikmati kelezatan tahu crispy kami
             </p>
           </div>
+
+          <BudgetTahuCard
+            onBuyNow={handleBuyNow}
+            onAddToCart={addToCart}
+            options={[
+              { id: "budget-10", budget: 10000, pieces: 4, sambal: "1 cup 25 ml", image: img1, comparison: "Small Pack" },
+              { id: "budget-15", budget: 15000, pieces: 6, sambal: "1 cup 35 ml", image: img2, comparison: "¾ Medium Pack" },
+              { id: "budget-18", budget: 18000, pieces: 8, sambal: "1 cup 35 ml", image: img2, comparison: "Medium Pack", highlight: "Paling pas" },
+              { id: "budget-20", budget: 20000, pieces: 9, sambal: "1 cup 35 ml + 1 cup 25 ml", image: img3, comparison: "Medium + 1 pcs" },
+              { id: "budget-25", budget: 25000, pieces: 11, sambal: "1 cup 35 ml + 1 cup 25 ml", image: img1, comparison: "Medium + 3 pcs" },
+              { id: "budget-35", budget: 35000, pieces: 18, sambal: "2 cup 35 ml", image: img3, comparison: "Large Pack", highlight: "Hemat" },
+              { id: "budget-50", budget: 50000, pieces: 25, sambal: "3 cup 35 ml", image: img2, comparison: "Large + 7 pcs", highlight: "Paling hemat" },
+            ]}
+          />
 
           <div className="mb-16">
             <div className="mb-8">
@@ -229,7 +299,7 @@ export default function Home() {
                       onBuyNow={handleBuyNow}
                       onAddToCart={addToCart}
                     />
-                  ))}
+               ))}
               </div>
             </div>
           )}
@@ -237,7 +307,10 @@ export default function Home() {
       </section>
 
       <InfoSection />
-      <DeliveryApps />
+      <SambelKalasanSection />
+      <DeliveryApps status={globalStatus} />
+      <DeliveryEstimator />
+      <QrisPayment />
       <BankInfo />
       <ContactSection />
       <Footer />

@@ -1,6 +1,26 @@
 node_modules
+.env
 dist
 .DS_Store
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# ── ZIP Backups (jangan push ke GitHub) ─────────────────────────
+*.zip
+
+# ── WhatsApp Bot Session (RAHASIA — jangan expose!) ─────────────
+baileys_auth_info/
+baileys_auth_info.zip
+.wwebjs_auth/
+.wwebjs_cache/
+
+# ── Logs ─────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Deploy artifacts ─────────────────────────────────────────────
+_deploy_staging/
+
+# ── Wrangler / Cloudflare ────────────────────────────────────────
+.wrangler/

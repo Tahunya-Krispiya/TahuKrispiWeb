@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // Hapus 'Link' dan 'useLocation' dari wouter jika hanya digunakan untuk scroll
 // Jika wouter masih diperlukan di komponen lain, biarkan saja. Saya asumsikan ini murni untuk anchor.
 // import { Link, useLocation } from "wouter"; 
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { ChevronDown, ExternalLink, Grid2X2, LockKeyhole, Menu, X, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import logoImg from "@assets/1763097449392_1763097461717.png";
@@ -15,6 +15,7 @@ interface NavbarProps {
 export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAppsOpen, setIsAppsOpen] = useState(false);
   // const [location] = useLocation(); // Hapus jika tidak digunakan
 
   useEffect(() => {
@@ -30,6 +31,24 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
     { href: "#menu", label: "Menu" }, // Anchor ke section Menu Anda
     { href: "#info", label: "Info" },
     { href: "#contact", label: "Contact" }
+  ];
+
+  const otherApps = [
+    {
+      label: "Liveflow",
+      description: "TikTok live tool buatan sendiri — pantau & kelola sesi live secara real-time",
+      href: import.meta.env.VITE_LIVEFLOW_URL || "https://liveflow.tahunyakrispiya.my.id/",
+    },
+    {
+      label: "QRISKas",
+      description: "Pencatat & QRIS scanner kasir tahu krispi",
+      href: import.meta.env.VITE_SCAN_URL || "https://scan.tahunyakrispiya.my.id/",
+    },
+    {
+      label: "DStock",
+      description: "Database stok independen — kelola & monitor inventaris",
+      href: "https://dstock.tahunyakrispiya.my.id/",
+    },
   ];
   
   // FUNGSI SCROLL YANG SUDAH DIPERBAIKI (Tidak ada definisi ganda)
@@ -53,8 +72,8 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/95 backdrop-blur-md shadow-md" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 ${
+        isScrolled ? "bg-background shadow-md" : "bg-background/95"
       }`}
       data-testid="navbar"
     >
@@ -78,7 +97,7 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
           </button>
           {/* END PERBAIKAN LOGO */}
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-5 xl:gap-8">
             {navLinks.map((link) => (
               <button
                 key={link.href}
@@ -89,6 +108,36 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
                 {link.label}
               </button>
             ))}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsAppsOpen((open) => !open)}
+                className="flex items-center gap-2 text-base font-medium text-foreground px-3 py-2 rounded-md hover:bg-black/5"
+                aria-expanded={isAppsOpen}
+              >
+                <Grid2X2 className="h-4 w-4" />
+                Aplikasi Lain
+                <ChevronDown className={`h-4 w-4 transition-transform ${isAppsOpen ? "rotate-180" : ""}`} />
+              </button>
+              {isAppsOpen && (
+                <div className="absolute right-0 mt-2 w-72 rounded-xl border bg-background p-2 shadow-xl">
+                  {otherApps.map((app) => app.href ? (
+                    <a key={app.label} href={app.href} className="flex items-center justify-between rounded-lg p-3 hover:bg-muted" target="_blank" rel="noreferrer">
+                      <span><span className="block font-semibold">{app.label}</span><span className="block text-xs text-muted-foreground">{app.description}</span></span>
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <div key={app.label} className="rounded-lg p-3 opacity-50" title={`Isi VITE_${app.label.toUpperCase()}_URL`}>
+                      <span className="block font-semibold">{app.label}</span>
+                      <span className="block text-xs">Atur URL di environment</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <a href="/login" className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-orange-600">
+              <LockKeyhole className="h-4 w-4" /> Admin
+            </a>
           </div>
 
           <div className="flex items-center gap-4">
@@ -113,7 +162,7 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="button-menu-toggle"
             >
@@ -124,18 +173,41 @@ export default function Navbar({ cartItemCount = 0, onCartClick }: NavbarProps) 
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-background border-t animate-fade-in" data-testid="mobile-menu">
-          <div className="px-4 py-6 space-y-4">
+        <div
+          className="lg:hidden bg-background border-t shadow-lg"
+          data-testid="mobile-menu"
+          style={{
+            maxHeight: "calc(100dvh - 64px)",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => scrollToSection(link.href)}
-                className="block w-full text-left text-base font-medium text-foreground hover-elevate active-elevate-2 px-4 py-3 rounded-md"
+                className="block w-full text-left text-base font-medium text-foreground hover-elevate active-elevate-2 px-4 py-3 rounded-md transition-colors hover:bg-muted"
                 data-testid={`mobile-link-${link.label.toLowerCase()}`}
               >
                 {link.label}
               </button>
             ))}
+            <div className="border-t pt-3 mt-2">
+              <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Aplikasi Lain</p>
+              {otherApps.map((app) => app.href && (
+                <a key={app.label} href={app.href} target="_blank" rel="noreferrer" className="flex w-full items-center justify-between px-4 py-3 rounded-md hover:bg-muted transition-colors">
+                  <span>
+                    <span className="block font-semibold text-sm text-foreground">{app.label}</span>
+                    <span className="block text-xs text-muted-foreground leading-snug mt-0.5 max-w-[240px]">{app.description}</span>
+                  </span>
+                  <ExternalLink className="h-4 w-4 shrink-0 ml-2 text-muted-foreground" />
+                </a>
+              ))}
+            </div>
+            <a href="/login" className="flex w-full items-center gap-2 border-t px-4 py-4 font-semibold text-orange-700 hover:bg-orange-50 rounded-md transition-colors">
+              <LockKeyhole className="h-4 w-4" /> Login Admin
+            </a>
           </div>
         </div>
       )}

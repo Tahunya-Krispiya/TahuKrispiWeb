@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import shopeeFoodLogo from "@assets/20251115_114212_1763181742871.png";
 import goFoodLogo from "@assets/20251115_114119_1763181742925.png";
 import grabFoodLogo from "@assets/20251115_113828_1763181742952.png";
+import type { DeliveryStatus } from "@/lib/firebase";
 
 interface DeliveryApp {
   name: string;
@@ -19,7 +20,7 @@ const deliveryApps: DeliveryApp[] = [
   {
     name: "GoFood",
     color: "bg-red-600",
-    url: "https://gofood.link/u/your-store",
+    url: "https://gofood.link/a/M6pGo27",
     description: "Pesan via GoFood",
     isOnline: true,
     logo: goFoodLogo
@@ -42,7 +43,12 @@ const deliveryApps: DeliveryApp[] = [
   }
 ];
 
-export default function DeliveryApps() {
+export default function DeliveryApps({ status }: { status?: DeliveryStatus }) {
+  const onlineState: Record<string, boolean> = {
+    GoFood: status?.isGoFoodOnline ?? false,
+    GrabFood: status?.isGrabFoodOnline ?? false,
+    ShopeeFood: status?.isShopeeFoodOnline ?? false,
+  };
   return (
     <section className="py-16 md:py-24 bg-muted/20" data-testid="delivery-apps-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,8 +66,10 @@ export default function DeliveryApps() {
 
         <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {deliveryApps.map((app) => {
+            const isOnline = onlineState[app.name];
+            const canOpen = app.name === "GoFood" || isOnline;
             return (
-              <Card key={app.name} className="hover-elevate transition-all duration-300 hover:-translate-y-1">
+              <Card key={app.name} className="hover-elevate transition-shadow duration-300">
                 <CardHeader>
                   <div className={`${app.color} text-white rounded-lg p-6 mb-4 flex items-center justify-center`}>
                     <img 
@@ -73,10 +81,10 @@ export default function DeliveryApps() {
                   </div>
                   <div className="flex justify-center">
                     <Badge 
-                      variant={app.isOnline ? "default" : "secondary"}
-                      className={app.isOnline ? "bg-green-600" : "bg-gray-500"}
+                      variant={isOnline ? "default" : "secondary"}
+                      className={app.name === "GoFood" ? "bg-red-600" : (isOnline ? app.color : "bg-gray-500")}
                     >
-                      {app.isOnline ? "Online" : "Offline"}
+                      {app.name === "GoFood" ? "Forgotten" : (isOnline ? "Online" : "Offline")}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -84,7 +92,7 @@ export default function DeliveryApps() {
                   <p className="text-center text-muted-foreground">
                     {app.description}
                   </p>
-                  {app.isOnline ? (
+                  {canOpen ? (
                     <Button
                       variant="outline"
                       className="w-full"
@@ -105,7 +113,7 @@ export default function DeliveryApps() {
                       disabled
                       data-testid={`button-${app.name.toLowerCase()}`}
                     >
-                      Belum Tersedia
+                      {app.name === "GoFood" ? "Layanan Tidak Aktif" : "Belum Tersedia"}
                     </Button>
                   )}
                 </CardContent>

@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tahunyakrispiya-main",
+  "compatibility_date": "2026-07-20",
+  "assets": {
+    "directory": "./dist/public",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    {
+      "pattern": "tahunyakrispiya.my.id/*",
+      "zone_name": "tahunyakrispiya.my.id"
+    }
+  ]
+}
