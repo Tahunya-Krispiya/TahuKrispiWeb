@@ -4,7 +4,7 @@
 
 <div align="center">
 
-<img src="https://tahunyakrispiya.my.id/favicon.png" alt="Tahunya Krispi-ya" width="80" />
+<img src="./client/public/favicon.png" alt="Tahunya Krispi-ya" width="80" />
 
 **Platform web e-commerce + branding untuk UMKM kuliner tahu crispy khas Bekasi Selatan.**
 
