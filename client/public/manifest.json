@@ -1,0 +1,20 @@
+{
+  "name": "Tahu Krispi - Catatan Penjualan",
+  "short_name": "Tahu Krispi",
+  "description": "Pencatat penjualan tahu krispi yang cepat dan simpel",
+  "start_url": "/catat",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#0f0f1a",
+  "orientation": "portrait",
+  "categories": ["business", "utilities"],
+  "lang": "id",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

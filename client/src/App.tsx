@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { onAuthStateChanged, User } from "firebase/auth";
+import { ThemeProvider } from "next-themes";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import Payment from "./pages/Payment";
+import CatatPenjualan from "./pages/CatatPenjualan";
 import LinkPage from "./pages/LinkPage";
 import { LiveNotificationPopup } from "./components/LiveNotificationPopup";
 import { auth, subscribeToStatus, PublicStatus } from "./lib/firebase";
@@ -61,31 +63,35 @@ export default function App() {
     useEffect(() => subscribeToStatus(setGlobalStatus), []);
 
     return (
-        <div className="overflow-x-hidden w-full max-w-full min-h-screen bg-[#FFFDF5]">
-            <LiveNotificationPopup />
-            <TooltipProvider>
-                <Router>
-                <Routes>
-                    <Route path="/" element={<Home globalStatus={globalStatus} />} />
-                    <Route path="/payment" element={<Payment />} />
-                    <Route path="/link" element={<LinkPage />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/admin"
-                        element={
-                            <ProtectedRoute isLoggedIn={authReady && !!user}>
-                                <AdminDashboard
-                                    currentStatus={globalStatus}
-                                onLogout={() => auth?.signOut()}
-                                />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-                <Toaster />
-            </Router>
-        </TooltipProvider>
-        </div>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="overflow-x-hidden w-full max-w-full min-h-screen bg-background text-foreground transition-colors duration-300">
+                <LiveNotificationPopup />
+                <TooltipProvider>
+                    <Router>
+                        <Routes>
+                            <Route path="/" element={<Home globalStatus={globalStatus} />} />
+                            <Route path="/payment" element={<Payment />} />
+                            <Route path="/link" element={<LinkPage />} />
+                            <Route path="/catat" element={<CatatPenjualan />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route
+                                path="/admin"
+                                element={
+                                    <ProtectedRoute isLoggedIn={authReady && !!user}>
+                                        <AdminDashboard
+                                            currentStatus={globalStatus}
+                                            onLogout={() => auth?.signOut()}
+                                        />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route path="*" element={<Navigate to="/" />} />
+                        </Routes>
+                        <Toaster />
+                    </Router>
+                </TooltipProvider>
+            </div>
+        </ThemeProvider>
     );
 }
+
